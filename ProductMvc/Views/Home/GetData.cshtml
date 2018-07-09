@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Chart";
+}
+
+
+<h2>Chart</h2>
+
+<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+<script>
+
+    var laptops = @Html.Raw(Json.Encode(ViewBag.LAPTOPS));
+    var mobiles = @Html.Raw(Json.Encode(ViewBag.MOBILES));
+    var desktops = @Html.Raw(Json.Encode(ViewBag.DESKTOPS));
+
+    $(document).ready(function () {
+
+        $.get("/Home/GetData", function () {
+
+            Highcharts.chart('container', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Category Ratio'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'category',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Laptops',
+                        y: laptops
+                    }, {
+                        name: 'Mobiles',
+                        y: mobiles
+                    }, {
+                        name: 'Desktops',
+                        y: desktops
+                    }]
+                }]
+            });
+
+        });
+    });
+
+</script>
+
+
